@@ -1,0 +1,13 @@
+# /etc/systemd/system/soar-ticketing.timer
+[Unit]
+Description=Run SOAR Ticketing every minute
+
+[Timer]
+OnBootSec=30s
+OnUnitActiveSec=60s
+AccuracySec=5s
+Persistent=true
+Unit=soar-ticketing.service
+
+[Install]
+WantedBy=timers.target

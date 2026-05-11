@@ -1,0 +1,17 @@
+version: "3.8"
+services:
+  n8n:
+    image: n8nio/n8n:latest
+    user: "1000:1000"
+    ports:
+      - "5678:5678"
+    environment:
+      - N8N_HOST=0.0.0.0
+      - N8N_PORT=5678
+      - N8N_PROTOCOL=http
+      - N8N_ENCRYPTION_KEY=88ca6d52698c12a41f49212a7c905be3146cd282a13d748acb6dc9ace8b08975
+      - N8N_SECURE_COOKIE=false
+      - TZ=Europe/Madrid
+    volumes:
+      - ./data:/home/node/.n8n
+    restart: unless-stopped

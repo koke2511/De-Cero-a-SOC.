@@ -1,0 +1,20 @@
+[Unit]
+Description=SOAR Ticketing (Wazuh Indexer -> Jira)
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+Type=oneshot
+User=koke
+Group=koke
+WorkingDirectory=/opt/soar/ticketing
+
+# Carga variables del .env (JIRA_*, INDEXER_*, WAZUH_*)
+EnvironmentFile=/opt/soar/ticketing/.env
+Environment=PYTHONUNBUFFERED=1
+
+ExecStart=/opt/soar/ticketing/.venv/bin/python /opt/soar/ticketing/soar_indexer_to_jira.py
+
+# Logs al journal (ver con journalctl)
+StandardOutput=journal
+StandardError=journal
