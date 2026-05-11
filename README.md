@@ -4,7 +4,7 @@ Este repositorio contiene el código, configuraciones y evidencias asociadas a m
 
 ---
 
-## 📌 Objetivo del proyecto
+##  Objetivo del proyecto
 
 Construir y validar un laboratorio SOC que sea capaz de:
 
@@ -17,7 +17,7 @@ Construir y validar un laboratorio SOC que sea capaz de:
 
 ---
 
-## 🧱 Arquitectura del laboratorio
+##  Arquitectura del laboratorio
 
 El laboratorio se compone de **4 máquinas virtuales** con roles separados:
 
@@ -30,7 +30,7 @@ La red del laboratorio se mantiene en **Host-Only** con direccionamiento fijo en
 
 ---
 
-## 🔁 Flujo técnico (end-to-end)
+##  Flujo técnico (end-to-end)
 
 1. **Ataque controlado** desde Kali hacia Windows (p. ej., fuerza bruta).
 2. Windows genera **eventos** que son enviados por el **Wazuh Agent**.
@@ -45,7 +45,7 @@ La red del laboratorio se mantiene en **Host-Only** con direccionamiento fijo en
 
 ---
 
-## 📂 Estructura del repositorio
+##  Estructura del repositorio
 
 ```text
 tfg-soc-casero/
