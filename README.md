@@ -126,15 +126,11 @@ pip install -r requirements.txt
 ````md
 ##  Configurar variables de entorno
 
-Copia la plantilla y rellena valores:
 
 ```bash
 cp .env.example .env
 nano .env
 ````
-
-> Importante: **no subas tu `.env` real** al repositorio (contiene secretos).
-
 ---
 
 ##  Ejecución manual del SOAR (prueba)
