@@ -122,3 +122,100 @@ cd /opt/soar/ticketing
 python3 -m venv .venv
 source .venv/bin/activate
 pip install -r requirements.txt
+```
+````md
+##  Configurar variables de entorno
+
+Copia la plantilla y rellena valores:
+
+```bash
+cp .env.example .env
+nano .env
+````
+
+> Importante: **no subas tu `.env` real** al repositorio (contiene secretos).
+
+---
+
+##  Ejecución manual del SOAR (prueba)
+
+```bash
+cd /opt/soar/ticketing
+source .venv/bin/activate
+python3 soar_indexer_to_jira.py
+```
+
+Si hay alertas nuevas que cumplan el filtro, se crearán tickets en Jira y se disparará notificación a n8n.
+
+---
+
+##  Ejecución automática (systemd)
+
+Se incluye el servicio y el timer para ejecutar el SOAR cada minuto.
+
+Copiar y activar (en Ubuntu SOAR):
+
+```bash
+sudo cp soar/systemd/soar-ticketing.service /etc/systemd/system/
+sudo cp soar/systemd/soar-ticketing.timer /etc/systemd/system/
+sudo systemctl daemon-reload
+sudo systemctl enable --now soar-ticketing.timer
+```
+
+Comprobar:
+
+```bash
+systemctl list-timers --all | grep soar-ticketing
+journalctl -u soar-ticketing.service -n 50 --no-pager
+```
+
+---
+
+##  Notificaciones con n8n
+
+Levantar n8n (Ubuntu SOAR):
+
+```bash
+cd n8n
+docker compose up -d
+```
+
+Acceso:
+
+* `http://192.168.56.10:5678` (ajusta la IP a tu laboratorio)
+
+Importar el workflow:
+
+* `n8n/workflows/soc-alert-notify.json`
+
+---
+
+##  Evidencias
+
+En `docs/evidencias/` se incluyen extractos verificables:
+
+* ejecución de Active Response (`netsh`) en el log del agente
+* regla de firewall creada con la IP bloqueada
+
+Además, las evidencias operativas se complementan con:
+
+* tickets generados en Jira
+* executions de n8n
+* consultas a `wazuh-alerts-*`
+
+---
+
+##  Seguridad y secretos
+
+Este repositorio **no incluye secretos**.
+Todo token/contraseña debe quedar fuera del repo y configurarse en `.env` local o en un gestor de secretos.
+
+---
+
+## Autor
+
+Trabajo de Fin de Grado — Jorge Ferrero
+
+```
+```
+
