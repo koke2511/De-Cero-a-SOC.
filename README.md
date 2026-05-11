@@ -77,100 +77,48 @@ tfg-soc-casero/
    └─ workflows/
       └─ soc-alert-notify.json
 ```
-🧩 Componentes principales
-Wazuh (SIEM/XDR)
-Centraliza telemetría y genera alertas.
-Mantiene evidencias indexadas en wazuh-alerts-*.
-Implementa correlación y Active Response.
+##  Componentes principales
 
-Archivos relevantes: wazuh/ossec.conf, wazuh/local_rules.xml, wazuh/opensearch.yml, wazuh/opensearch_dashboards.yml.
+### Wazuh (SIEM/XDR)
+- Centraliza telemetría y genera alertas.
+- Mantiene evidencias indexadas en `wazuh-alerts-*`.
+- Implementa correlación y **Active Response**.
 
-SOAR (Python)
-Consulta alertas en el Indexer.
-Filtra por agente/regla/severidad y aplica deduplicación por ID.
-Crea tickets en Jira con descripción estructurada (ADF).
-Dispara notificaciones a n8n vía webhook.
+**Archivos relevantes:** `wazuh/ossec.conf`, `wazuh/local_rules.xml`, `wazuh/opensearch.yml`, `wazuh/opensearch_dashboards.yml`.
 
-Scripts: soar/soar_indexer_to_jira.py y soar/soar_create_ticket.py.
+---
 
-n8n (Notificaciones)
-Recibe un webhook desde el SOAR.
-Envía email siempre.
-Envía Telegram solo en incidentes críticos (según condición del workflow).
-🚀 Instalación (Ubuntu SOAR)
-1) Requisitos
-Python 3
-(Opcional) venv
-Acceso a Jira Cloud (email + token)
-Acceso al Indexer de Wazuh (credenciales)
-Docker (para n8n)
-2) Instalar dependencias del SOAR
+### SOAR (Python)
+- Consulta alertas en el Indexer.
+- Filtra por agente/regla/severidad y aplica **deduplicación por ID**.
+- Crea tickets en Jira con descripción estructurada (**ADF**).
+- Dispara notificaciones a **n8n** vía webhook.
+
+**Scripts:** `soar/soar_indexer_to_jira.py` y `soar/soar_create_ticket.py`.
+
+---
+
+### n8n (Notificaciones)
+- Recibe un webhook desde el SOAR.
+- Envía **email siempre**.
+- Envía **Telegram solo en incidentes críticos** (según condición del workflow).
+
+---
+
+##  Instalación (Ubuntu SOAR)
+
+### 1) Requisitos
+- Python 3  
+- (Opcional) `venv`  
+- Acceso a Jira Cloud (email + token)  
+- Acceso al Indexer de Wazuh (credenciales)  
+- Docker (para n8n)
+
+---
+
+### 2) Instalar dependencias del SOAR
+```bash
 cd /opt/soar/ticketing
 python3 -m venv .venv
 source .venv/bin/activate
 pip install -r requirements.txt
-3) Configurar variables de entorno
-
-Copia la plantilla y rellena valores:
-
-cp .env.example .env
-nano .env
-
-Importante: no subas tu .env real al repositorio (contiene secretos).
-
-🧪 Ejecución manual del SOAR (prueba)
-cd /opt/soar/ticketing
-source .venv/bin/activate
-python3 soar_indexer_to_jira.py
-
-Si hay alertas nuevas que cumplan el filtro, se crearán tickets en Jira y se disparará notificación a n8n.
-
-⏱️ Ejecución automática (systemd)
-
-Se incluye el servicio y el timer para ejecutar el SOAR cada minuto.
-
-Copiar y activar (en Ubuntu SOAR):
-
-sudo cp soar/systemd/soar-ticketing.service /etc/systemd/system/
-sudo cp soar/systemd/soar-ticketing.timer /etc/systemd/system/
-sudo systemctl daemon-reload
-sudo systemctl enable --now soar-ticketing.timer
-
-Comprobar:
-
-systemctl list-timers --all | grep soar-ticketing
-journalctl -u soar-ticketing.service -n 50 --no-pager
-🔔 Notificaciones con n8n
-
-Levantar n8n (Ubuntu SOAR):
-
-cd n8n
-docker compose up -d
-
-Acceso:
-
-http://192.168.56.10:5678 (ajusta la IP a tu laboratorio)
-
-Importar el workflow:
-
-n8n/workflows/soc-alert-notify.json
-🧾 Evidencias
-
-En docs/evidencias/ se incluyen extractos verificables:
-
-ejecución de Active Response (netsh) en el log del agente
-regla de firewall creada con la IP bloqueada
-
-Además, las evidencias operativas se complementan con:
-
-tickets generados en Jira
-executions de n8n
-consultas a wazuh-alerts-*
-🔒 Seguridad y secretos
-
-Este repositorio no incluye secretos.
-Todo token/contraseña debe quedar fuera del repo y configurarse en .env local o en un gestor de secretos.
-
-Autor
-
-Trabajo de Fin de Grado — Jorge Ferrero
