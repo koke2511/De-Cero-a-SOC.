@@ -8,7 +8,7 @@ Este repositorio contiene el código, configuraciones y evidencias asociadas a m
 
 Construir y validar un laboratorio SOC que sea capaz de:
 
-- Monitorizar y centralizar telemetría (logs) de distintos equipos.
+- Monitorizar y centralizar telemetría de distintos equipos.
 - Detectar y **correlacionar** eventos repetitivos para reducir ruido.
 - Convertir incidentes en **tickets operativos** (Jira) de forma automática.
 - Enviar **notificaciones** (email y Telegram solo críticos).
@@ -32,10 +32,10 @@ La red del laboratorio se mantiene en **Host-Only** con direccionamiento fijo en
 
 ##  Flujo técnico (end-to-end)
 
-1. **Ataque controlado** desde Kali hacia Windows (p. ej., fuerza bruta).
+1. **Ataque controlado** desde Kali hacia Windows (fuerza bruta).
 2. Windows genera **eventos** que son enviados por el **Wazuh Agent**.
 3. Wazuh centraliza e indexa en **`wazuh-alerts-*`**.
-4. Se aplican reglas y **correlación** para convertir eventos repetitivos en incidentes operativos (p. ej., `60122` → `100501`).
+4. Se aplican reglas y **correlación** para convertir eventos repetitivos en incidentes operativos (`60122` → `100501`).
 5. El **SOAR (Python)** consulta el Indexer, filtra, deduplica y **crea tickets en Jira**.
 6. El SOAR notifica a **n8n**, que envía:
    - **Email** (canal general)
@@ -49,14 +49,6 @@ La red del laboratorio se mantiene en **Host-Only** con direccionamiento fijo en
 
 ```text
 tfg-soc-casero/
-├─ README.md
-├─ docs/
-│  ├─ arquitectura.png
-│  ├─ flujo_tecnico.png
-│  ├─ modelo_datos.png
-│  └─ evidencias/
-│     ├─ windows_active_responses_excerpt.txt
-│     └─ windows_firewall_rule.txt
 ├─ wazuh/
 │  ├─ ossec.conf
 │  ├─ local_rules.xml
@@ -73,9 +65,6 @@ tfg-soc-casero/
 │     └─ soar-ticketing.timer
 └─ n8n/
    ├─ docker-compose.yml
-   ├─ .env.example
-   └─ workflows/
-      └─ soc-alert-notify.json
 ```
 ##  Componentes principales
 
@@ -101,7 +90,7 @@ tfg-soc-casero/
 ### n8n (Notificaciones)
 - Recibe un webhook desde el SOAR.
 - Envía **email siempre**.
-- Envía **Telegram solo en incidentes críticos** (según condición del workflow).
+- Envía **Telegram solo en incidentes críticos.**
 
 ---
 
@@ -125,7 +114,6 @@ pip install -r requirements.txt
 ```
 ````md
 ##  Configurar variables de entorno
-
 
 ```bash
 cp .env.example .env
