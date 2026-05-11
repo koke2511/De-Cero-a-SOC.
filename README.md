@@ -49,22 +49,24 @@ La red del laboratorio se mantiene en **Host-Only** con direccionamiento fijo en
 
 ```text
 tfg-soc-casero/
-├─ wazuh/
-│  ├─ ossec.conf
-│  ├─ local_rules.xml
-│  ├─ opensearch.yml
-│  └─ opensearch_dashboards.yml
+├─ n8n
+   └─ docker-compose.yml
 ├─ soar/
-│  ├─ soar_create_ticket.py
-│  ├─ soar_indexer_to_jira.py
-│  ├─ soar_indexer_to_jira_correlated.py
-│  ├─ requirements.txt
-│  ├─ .env.example
-│  └─ systemd/
-│     ├─ soar-ticketing.service
-│     └─ soar-ticketing.timer
-└─ n8n/
-   ├─ docker-compose.yml
+   ├─systemd/
+      ├─ soar-ticketing.service
+      └─ soar-ticketing.timer
+   ├─ .env
+   ├─ requirements.txt
+   ├─ soar_create_ticket.py
+   ├─ soar_indexer_to_jira.py
+   ├─ soar_indexer_to_jira_correlated.py
+├─ wazuh/
+   ├─ local_rules.xml
+   ├─ opensearch.yml
+   ├─ opensearch_dashboards.yml
+   └─ ossec.conf
+├─ README.md
+   
 ```
 ##  Componentes principales
 
