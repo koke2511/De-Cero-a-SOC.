@@ -202,6 +202,4 @@ Todo token/contraseña debe quedar fuera del repo y configurarse en `.env` local
 
 Trabajo de Fin de Grado — Jorge Ferrero
 
-```
-```
 
