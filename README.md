@@ -1,6 +1,6 @@
 # TFG — SOC casero (laboratorio reproducible)
 
-Este repositorio contiene el código, configuraciones y evidencias asociadas a mi Trabajo de Fin de Grado, cuyo objetivo es diseñar, implementar y validar un **SOC casero** en un **laboratorio virtual reproducible**. El proyecto demuestra un flujo operativo completo de gestión de incidentes usando principalmente herramientas **open-source** y recursos limitados: **evento → alerta → correlación → ticket → notificación → respuesta → evidencias**.
+Este repositorio contiene el código, configuraciones y evidencias asociadas a mi Trabajo de Fin de Grado, cuyo objetivo es diseñar, implementar y validar un SOC casero en un laboratorio virtual reproducible. El proyecto demuestra un flujo operativo completo de gestión de incidentes usando principalmente herramientas open-source y recursos limitados: evento → alerta → correlación → ticket → notificación → respuesta → evidencias.
 
 ---
 
@@ -9,38 +9,38 @@ Este repositorio contiene el código, configuraciones y evidencias asociadas a m
 Construir y validar un laboratorio SOC que sea capaz de:
 
 - Monitorizar y centralizar telemetría de distintos equipos.
-- Detectar y **correlacionar** eventos repetitivos para reducir ruido.
-- Convertir incidentes en **tickets operativos** (Jira) de forma automática.
-- Enviar **notificaciones** (email y Telegram solo críticos).
-- Aplicar **contención automática** en el endpoint (bloqueo de IP).
-- Mantener **evidencias verificables** en cada fase del ciclo, orientadas a supervisión y trazabilidad coherentes con el enfoque de ISO/IEC 27001.
+- Detectar y correlacionar eventos repetitivos para reducir ruido.
+- Convertir incidentes en tickets operativos (Jira) de forma automática.
+- Enviar notificaciones (email y Telegram solo críticos).
+- Aplicar contención automática en el endpoint (bloqueo de IP).
+- Mantener evidencias verificables en cada fase del ciclo, orientadas a supervisión y trazabilidad coherentes con el enfoque de ISO/IEC 27001.
 
 ---
 
 ##  Arquitectura del laboratorio
 
-El laboratorio se compone de **4 máquinas virtuales** con roles separados:
+El laboratorio se compone de 4 máquinas virtuales con roles separados:
 
-- **Kali Linux (Atacante)**: genera ataques controlados.
-- **Windows 11 (Víctima / Endpoint)**: recibe ataques y genera eventos de seguridad.
-- **Ubuntu Server (SOAR)**: ejecuta scripts de automatización, ticketing y notificaciones.
-- **Servidor Wazuh (SIEM/XDR)**: centraliza, correlaciona y permite investigación (Manager + Dashboard + Indexer).
+- Kali Linux (Atacante): genera ataques controlados.
+- Windows 11 (Víctima / Endpoint): recibe ataques y genera eventos de seguridad.
+- Ubuntu Server (SOAR): ejecuta scripts de automatización, ticketing y notificaciones.
+- Servidor Wazuh (SIEM/XDR): centraliza, correlaciona y permite investigación (Manager + Dashboard + Indexer).
 
-La red del laboratorio se mantiene en **Host-Only** con direccionamiento fijo en **192.168.56.0/24** para poder repetir pruebas consistentemente.
+La red del laboratorio se mantiene en Host-Only con direccionamiento fijo en 192.168.56.0/24 para poder repetir pruebas consistentemente.
 
 ---
 
 ##  Flujo técnico (end-to-end)
 
-1. **Ataque controlado** desde Kali hacia Windows (fuerza bruta).
-2. Windows genera **eventos** que son enviados por el **Wazuh Agent**.
-3. Wazuh centraliza e indexa en **`wazuh-alerts-*`**.
-4. Se aplican reglas y **correlación** para convertir eventos repetitivos en incidentes operativos (`60122` → `100501`).
-5. El **SOAR (Python)** consulta el Indexer, filtra, deduplica y **crea tickets en Jira**.
-6. El SOAR notifica a **n8n**, que envía:
-   - **Email** (canal general)
-   - **Telegram** solo para incidentes críticos
-7. **Active Response** ejecuta contención automática en Windows (bloqueo de IP con `netsh`).
+1. Ataque controlado desde Kali hacia Windows (fuerza bruta).
+2. Windows genera eventos que son enviados por el Wazuh Agent.
+3. Wazuh centraliza e indexa en `wazuh-alerts-*`.
+4. Se aplican reglas y correlación para convertir eventos repetitivos en incidentes operativos (`60122` → `100501`).
+5. El SOAR (Python) consulta el Indexer, filtra, deduplica y crea tickets en Jira.
+6. El SOAR notifica a n8n, que envía:
+   - Email (canal general)
+   - Telegram solo para incidentes críticos
+7. Active Response ejecuta contención automática en Windows (bloqueo de IP con `netsh`).
 8. Se recopilan evidencias: alertas indexadas, ticket, notificaciones y regla de firewall.
 
 ---
@@ -73,26 +73,26 @@ tfg-soc-casero/
 ### Wazuh (SIEM/XDR)
 - Centraliza telemetría y genera alertas.
 - Mantiene evidencias indexadas en `wazuh-alerts-*`.
-- Implementa correlación y **Active Response**.
+- Implementa correlación y Active Response.
 
-**Archivos relevantes:** `wazuh/ossec.conf`, `wazuh/local_rules.xml`, `wazuh/opensearch.yml`, `wazuh/opensearch_dashboards.yml`.
+Archivos relevantes: `wazuh/ossec.conf`, `wazuh/local_rules.xml`, `wazuh/opensearch.yml`, `wazuh/opensearch_dashboards.yml`.
 
 ---
 
 ### SOAR (Python)
 - Consulta alertas en el Indexer.
-- Filtra por agente/regla/severidad y aplica **deduplicación por ID**.
-- Crea tickets en Jira con descripción estructurada (**ADF**).
-- Dispara notificaciones a **n8n** vía webhook.
+- Filtra por agente/regla/severidad y aplica deduplicación por ID.
+- Crea tickets en Jira con descripción estructurada (ADF).
+- Dispara notificaciones a n8n vía webhook.
 
-**Scripts:** `soar/soar_indexer_to_jira.py` y `soar/soar_create_ticket.py`.
+Scripts: `soar/soar_indexer_to_jira.py` y `soar/soar_create_ticket.py`.
 
 ---
 
 ### n8n (Notificaciones)
 - Recibe un webhook desde el SOAR.
-- Envía **email siempre**.
-- Envía **Telegram solo en incidentes críticos.**
+- Envía email siempre.
+- Envía Telegram solo en incidentes críticos
 
 ---
 
@@ -193,7 +193,7 @@ Además, las evidencias operativas se complementan con:
 
 ##  Seguridad y secretos
 
-Este repositorio **no incluye secretos**.
+Este repositorio no incluye secretos.
 Todo token/contraseña debe quedar fuera del repo y configurarse en `.env` local o en un gestor de secretos.
 
 ---
